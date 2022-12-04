@@ -1,7 +1,7 @@
 import argparse
 import os
 from math import log10
-
+import wandb
 import pandas as pd
 import torch.optim as optim
 import torch.utils.data
@@ -160,7 +160,9 @@ if __name__ == '__main__':
         results['g_score'].append(running_results['g_score'] / running_results['batch_sizes'])
         results['psnr'].append(valing_results['psnr'])
         results['ssim'].append(valing_results['ssim'])
-    
+
+        wandb.log({'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
+                      'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']})
         if epoch % 10 == 0 and epoch != 0:
             out_path = 'statistics/'
             data_frame = pd.DataFrame(
